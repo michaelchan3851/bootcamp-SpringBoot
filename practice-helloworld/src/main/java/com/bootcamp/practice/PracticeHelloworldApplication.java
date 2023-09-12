@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
+// @Configuration
+// EnableAutoConfiguration
+// ComponentScan (Most Important)
 public class PracticeHelloworldApplication {
 
 	public static void main(String[] args) {

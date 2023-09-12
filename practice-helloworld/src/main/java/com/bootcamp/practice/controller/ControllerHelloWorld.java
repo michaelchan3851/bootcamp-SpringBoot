@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @ResponseBody
-@RequestMapping(value = "/api/v2")
+@RequestMapping(value = "/api/v2") // "/"
 public class ControllerHelloWorld {
 
   @GetMapping(value = "/helloworld")
   public String helloworld(){
-    return "Hello world! I am Version2.";
+    return "Hello world! I am Version2!!!";
   }
   
 }
