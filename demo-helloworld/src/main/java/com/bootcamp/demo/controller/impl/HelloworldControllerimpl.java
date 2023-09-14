@@ -17,14 +17,15 @@ import com.bootcamp.demo.service.impl.HelloworldServiceImpl;
 public class HelloworldControllerimpl implements HelloworldController {
 
   
-  @Autowired
-  HelloworldServiceImpl helloworldServiceImpl;
+  @Autowired // Check if any object implementing HelloworldService in SpringContext
+  HelloworldService helloworldService;
 
   @Override
   public String hello() {
-    //HelloworldServiceImpl helloworldServiceImpl = new HelloworldService() {
-    return helloworldServiceImpl.generate(102);
+    // HelloworldService helloworldService = new HelloworldService();
+    return helloworldService.generate(102);
   }
 
 }
+
 
