@@ -1,0 +1,9 @@
+server:
+  port: 8083
+
+api:
+  jsonplaceholder:
+    domain: 'jsonplaceholder.typicode.com'
+    endpoints:
+      users: '/users'
+      posts: '/posts'
