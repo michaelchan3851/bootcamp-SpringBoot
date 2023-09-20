@@ -16,5 +16,6 @@ public class CompanyDTOMapper {
       .dayOpen(quote.getO()) //
       .preDayClose(quote.getPc()) //
       .build(); //
+      
   }
 }

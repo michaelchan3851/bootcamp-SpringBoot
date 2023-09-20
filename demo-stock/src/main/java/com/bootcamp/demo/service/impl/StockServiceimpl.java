@@ -1,8 +1,5 @@
 package com.bootcamp.demo.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.bootcamp.demo.model.Company;
 import com.bootcamp.demo.model.CompanyDTO;
 import com.bootcamp.demo.model.CompanyProfile;
+import com.bootcamp.demo.entity.Stock;
 import com.bootcamp.demo.exception.SYMExpection;
 import com.bootcamp.demo.infra.BusinessException;
 import com.bootcamp.demo.infra.Code;
@@ -20,11 +18,14 @@ import com.bootcamp.demo.infra.Protocol;
 import com.bootcamp.demo.mapper.CompanyDTOMapper;
 import com.bootcamp.demo.mapper.CompanyMapper;
 import com.bootcamp.demo.model.Quote;
+import com.bootcamp.demo.respository.StockRepository;
 import com.bootcamp.demo.service.StockService;
 
 @Service
 public class StockServiceimpl implements StockService {
 
+  @Autowired
+  private StockRepository stockRepository;
   @Autowired
   private RestTemplate restTemplate; // from Context
 
@@ -39,6 +40,11 @@ public class StockServiceimpl implements StockService {
 
   @Value(value = "${api.finnhub.endpoints.token}")
   private String apiToken; // users from yml
+
+  @Override
+  public Stock save(Stock stock){
+    return stockRepository.save(stock); //insert into 
+  }
 
   @Override
   public Company findCompany(String symbol) throws BusinessException {
@@ -70,8 +76,8 @@ public class StockServiceimpl implements StockService {
         .scheme(Protocol.HTTPS.name()) // https
         .host(finnhubDomain) // www.jsonplaceholder.typicode.com
         .path(quoteEndpoint) //
-        .queryParam("symbol", symbol)
-        .queryParam("token", apiToken)
+        .queryParam("symbol", symbol) //
+        .queryParam("token", apiToken) //
         .toUriString();
 
     System.out.println("url=" + url);

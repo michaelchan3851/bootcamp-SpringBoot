@@ -12,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.bootcamp.demo.model.CompanyDTO;
 import com.bootcamp.demo.model.CompanyProfile;
@@ -36,7 +34,7 @@ public class StockControllerTest {
     CompanyDTO companyDTO = new CompanyDTO(companyProfile, 177.97, 179.38, 176.44, 176.48, 175.01);
     Mockito.when(stockService.findCompanyDTO(symbol)).thenReturn(companyDTO);
 
-    mockMvc.perform(get("/api/v1/stock/AAPL"))
+    mockMvc.perform(get("/api/v1/stock/AAPL")) //
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.code").value(20000))

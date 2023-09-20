@@ -1,7 +1,7 @@
 package com.bootcamp.demo.service;
 
-import java.util.List;
-
+import com.bootcamp.demo.entity.Stock;
+import com.bootcamp.demo.exception.SYMExpection;
 import com.bootcamp.demo.infra.BusinessException;
 import com.bootcamp.demo.model.Company;
 import com.bootcamp.demo.model.CompanyDTO;
@@ -14,4 +14,6 @@ public interface StockService {
   Quote findQuote(String symbol) throws BusinessException;
 
   CompanyDTO findCompanyDTO(String symbol) throws BusinessException;
+
+  Stock save(Stock stock);
 }
