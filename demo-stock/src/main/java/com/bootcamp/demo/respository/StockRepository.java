@@ -12,6 +12,11 @@ import java.util.List;
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
   // select * from table where company_name = "";
-  List<Stock> findByCompanyName(String companyName); 
+  List<Stock> findAll(); 
+
+  List<Stock> findByCountry(String country); 
   
+  List<Stock> findByCountryAndMarketCapGreaterThan(String country, double marketCap);
+
+
 }

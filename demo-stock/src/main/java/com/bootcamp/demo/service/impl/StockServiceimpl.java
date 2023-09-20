@@ -1,5 +1,8 @@
 package com.bootcamp.demo.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,11 @@ import com.bootcamp.demo.model.Quote;
 import com.bootcamp.demo.respository.StockRepository;
 import com.bootcamp.demo.service.StockService;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class StockServiceimpl implements StockService {
 
   @Autowired
@@ -42,8 +49,66 @@ public class StockServiceimpl implements StockService {
   private String apiToken; // users from yml
 
   @Override
-  public Stock save(Stock stock){
-    return stockRepository.save(stock); //insert into 
+  public List<Stock> findAll() {
+    return stockRepository.findAll();
+  }
+
+  @Override
+  public List<Stock> findByCountry(String country) {
+    return stockRepository.findByCountry(country);
+  }
+
+  @Override
+  public List<Stock> findByCountryAndMarketCapGreaterThan(String country, double marketCap) {
+    return stockRepository.findByCountryAndMarketCapGreaterThan(country, marketCap);
+  }
+
+  @Override
+  public void updateById(Long id, Stock newStock) {
+    // if (!stockRepository.existsById(id))
+    // return false;
+    // stockRepository.save(stock);
+    Stock stock = stockRepository.findById(id) //
+        .orElseThrow(() -> new EntityNotFoundException("Entity Stock ID not Found"));
+    stock.setCompanyName(newStock.getCompanyName());
+    stock.setCountry(newStock.getCountry());
+    stock.setIpoDate(newStock.getIpoDate());
+    stock.setMarketCap(newStock.getMarketCap());
+    stock.setCurrency(newStock.getCurrency());
+    stock.setLogo(newStock.getLogo());
+    stockRepository.save(stock);
+  }
+
+  @Override
+  public Stock save(Stock stock) {
+    return stockRepository.save(stock); // insert into
+  }
+
+  @Override
+  public void deleteById(Long Id) {
+    stockRepository.deleteById(Id);
+  }
+
+  @Override
+  public void updateCompanyNameById(Long id, String companyName) {
+    Stock stock = stockRepository.findById(id) //
+    .orElseThrow(() -> new EntityNotFoundException("Entity Stock ID not Found"));
+
+    stock.setCompanyName(companyName);
+    stockRepository.save(stock);
+    // Optional<Stock> stock = stockRepository.findById(id);
+    // log.info("check : " + stockRepository.findById(id).toString());
+    // log.info("companyName : " + companyName);
+    // if (stock.isPresent()) {
+    //   stock.stream() //
+    //       .filter(c -> c.getId() == id) //
+    //       .forEach(c -> { //
+    //         c.setCompanyName(companyName); //
+    //       });
+    // }
+    // stockRepository.save(stock.get());
+    // log.info("after : " + stock);
+
   }
 
   @Override

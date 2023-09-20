@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "finnhub_stocks")
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Stock implements Serializable {
 
   @Id // primary key
