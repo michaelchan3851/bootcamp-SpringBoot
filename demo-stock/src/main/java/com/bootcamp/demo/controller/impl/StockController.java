@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.demo.controller.StockOperation;
-import com.bootcamp.demo.exception.SYMExpection;
 import com.bootcamp.demo.infra.ApiResponse;
 import com.bootcamp.demo.infra.Code;
 import com.bootcamp.demo.model.Company;

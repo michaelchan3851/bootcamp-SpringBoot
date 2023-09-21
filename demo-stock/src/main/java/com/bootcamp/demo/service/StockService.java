@@ -30,4 +30,6 @@ public interface StockService {
   void deleteById(Long id);
 
   void updateCompanyNameById(Long id, String companyName);
+
+  
 }

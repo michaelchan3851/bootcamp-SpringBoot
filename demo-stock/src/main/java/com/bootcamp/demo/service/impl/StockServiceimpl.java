@@ -50,6 +50,8 @@ public class StockServiceimpl implements StockService {
 
   @Override
   public List<Stock> findAll() {
+    //return stockRepository.findAllById2(4L);
+    // return stockRepository.findAllById3();
     return stockRepository.findAll();
   }
 
@@ -92,7 +94,7 @@ public class StockServiceimpl implements StockService {
   @Override
   public void updateCompanyNameById(Long id, String companyName) {
     Stock stock = stockRepository.findById(id) //
-    .orElseThrow(() -> new EntityNotFoundException("Entity Stock ID not Found"));
+        .orElseThrow(() -> new EntityNotFoundException("Entity Stock ID not Found"));
 
     stock.setCompanyName(companyName);
     stockRepository.save(stock);
@@ -100,11 +102,11 @@ public class StockServiceimpl implements StockService {
     // log.info("check : " + stockRepository.findById(id).toString());
     // log.info("companyName : " + companyName);
     // if (stock.isPresent()) {
-    //   stock.stream() //
-    //       .filter(c -> c.getId() == id) //
-    //       .forEach(c -> { //
-    //         c.setCompanyName(companyName); //
-    //       });
+    // stock.stream() //
+    // .filter(c -> c.getId() == id) //
+    // .forEach(c -> { //
+    // c.setCompanyName(companyName); //
+    // });
     // }
     // stockRepository.save(stock.get());
     // log.info("after : " + stock);

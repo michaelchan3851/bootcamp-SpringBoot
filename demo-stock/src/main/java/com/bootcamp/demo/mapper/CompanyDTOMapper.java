@@ -1,6 +1,5 @@
 package com.bootcamp.demo.mapper;
 
-import com.bootcamp.demo.model.Company;
 import com.bootcamp.demo.model.CompanyDTO;
 import com.bootcamp.demo.model.CompanyProfile;
 import com.bootcamp.demo.model.Quote;

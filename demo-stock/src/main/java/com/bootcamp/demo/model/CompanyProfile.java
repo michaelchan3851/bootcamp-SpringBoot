@@ -1,5 +1,7 @@
 package com.bootcamp.demo.model;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class CompanyProfile {
   private String country;
   private String companyName;
-  private String ipoDate;
+  private LocalDate ipoDate;
   private String logo;
   private Double marketCap;
   private String currency;

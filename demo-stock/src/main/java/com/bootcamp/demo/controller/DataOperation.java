@@ -16,7 +16,7 @@ import com.bootcamp.demo.entity.Stock;
 
 public interface DataOperation {
 
-  @GetMapping(value = "/data/stocks")
+  @GetMapping(value = "/data/stock")
   @ResponseStatus(value = HttpStatus.OK)
   List<Stock> findAll();
 
@@ -45,5 +45,6 @@ public interface DataOperation {
   @ResponseStatus(value = HttpStatus.OK)
   void updateCompanyNameById(@PathVariable Long id, //
       @PathVariable String companyName);
+
 
 }

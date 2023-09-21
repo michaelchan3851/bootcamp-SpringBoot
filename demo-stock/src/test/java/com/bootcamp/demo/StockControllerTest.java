@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class StockControllerTest {
   @Test
   void testCompanyDTO() throws Exception {
     String symbol = "AAPL";
-    CompanyProfile companyProfile = new CompanyProfile("US", "Apple Inc", "1980-12-12",
+    CompanyProfile companyProfile = new CompanyProfile("US", "Apple Inc", LocalDate.of(1988, 12, 31),
         "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.svg", 2782424.256787212, "USD");
     CompanyDTO companyDTO = new CompanyDTO(companyProfile, 177.97, 179.38, 176.44, 176.48, 175.01);
     Mockito.when(stockService.findCompanyDTO(symbol)).thenReturn(companyDTO);
