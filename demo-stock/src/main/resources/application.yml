@@ -18,7 +18,7 @@ spring.jpa:
   ## Hiberate Properties
   properties.hiberate.dialect: org.hiberate.dialect.PostgreSQLDialect
   # Hiberate ddl auto (create, create-drop, validate, update)
-  hiberate.ddl-auto: validate #update
+  hiberate.ddl-auto: update #update
 
 spring.sql.init:
   # schema-locations: classpath:ddl/DDL_DROPS.sql, classpath:ddl/DDL_TUSERS.sql

@@ -3,7 +3,7 @@ package com.bootcamp.demo.service;
 import java.util.List;
 
 import com.bootcamp.demo.entity.Stock;
-import com.bootcamp.demo.exception.SYMExpection;
+import com.bootcamp.demo.entity.StockPrice;
 import com.bootcamp.demo.infra.BusinessException;
 import com.bootcamp.demo.model.Company;
 import com.bootcamp.demo.model.CompanyDTO;
@@ -29,7 +29,12 @@ public interface StockService {
 
   void deleteById(Long id);
 
+  void deleteAll();
+
   void updateCompanyNameById(Long id, String companyName);
 
+  StockPrice save(Long id, StockPrice stockPrice);
+
   
+
 }

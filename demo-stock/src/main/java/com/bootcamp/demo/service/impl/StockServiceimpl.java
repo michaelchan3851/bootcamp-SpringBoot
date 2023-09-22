@@ -14,6 +14,7 @@ import com.bootcamp.demo.model.Company;
 import com.bootcamp.demo.model.CompanyDTO;
 import com.bootcamp.demo.model.CompanyProfile;
 import com.bootcamp.demo.entity.Stock;
+import com.bootcamp.demo.entity.StockPrice;
 import com.bootcamp.demo.exception.SYMExpection;
 import com.bootcamp.demo.infra.BusinessException;
 import com.bootcamp.demo.infra.Code;
@@ -21,6 +22,7 @@ import com.bootcamp.demo.infra.Protocol;
 import com.bootcamp.demo.mapper.CompanyDTOMapper;
 import com.bootcamp.demo.mapper.CompanyMapper;
 import com.bootcamp.demo.model.Quote;
+import com.bootcamp.demo.respository.StockPriceRepository;
 import com.bootcamp.demo.respository.StockRepository;
 import com.bootcamp.demo.service.StockService;
 
@@ -33,6 +35,10 @@ public class StockServiceimpl implements StockService {
 
   @Autowired
   private StockRepository stockRepository;
+
+  @Autowired
+  private StockPriceRepository stockPriceRepository;
+
   @Autowired
   private RestTemplate restTemplate; // from Context
 
@@ -50,7 +56,7 @@ public class StockServiceimpl implements StockService {
 
   @Override
   public List<Stock> findAll() {
-    //return stockRepository.findAllById2(4L);
+    // return stockRepository.findAllById2(4L);
     // return stockRepository.findAllById3();
     return stockRepository.findAll();
   }
@@ -91,6 +97,12 @@ public class StockServiceimpl implements StockService {
     stockRepository.deleteById(Id);
   }
 
+  @Override 
+  public void deleteAll(){
+    stockRepository.deleteAll();
+    stockPriceRepository.deleteAll();
+  }
+
   @Override
   public void updateCompanyNameById(Long id, String companyName) {
     Stock stock = stockRepository.findById(id) //
@@ -120,24 +132,31 @@ public class StockServiceimpl implements StockService {
         .scheme(Protocol.HTTPS.name()) // https
         .host(finnhubDomain) // www.jsonplaceholder.typicode.com
         .path(profile2Endpoint) //
-        .queryParam("symbol", symbol)
-        .queryParam("token", apiToken)
+        .queryParam("symbol", symbol) //
+        .queryParam("token", apiToken) //
         .toUriString();
+
+    // logic 2 - 100 lines, call service, mocked resttemplate
+
+    String url2 = "abc.com/stock";
+
+    // logic 3 - 100 lines, call service
+    String url3 = "abc.com/stock";
 
     System.out.println("url=" + url);
     // Invoke API + Deserialization (JSON -> Object)
     // url =
     // "https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=ck4ffbpr01qus81pv1u0ck4ffbpr01qus81pv1ug";
-    // try {
-    return restTemplate.getForObject(url, Company.class); // return type = User[].class
-    // } catch (RestClientException e) {
-    // throw new SYMExpection(Code.SYMExpection);
-    // }
+    try {
+      return restTemplate.getForObject(url, Company.class); // return type = User[].class
+    } catch (RestClientException e) {
+      throw new SYMExpection(Code.SYMExpection);
+    }
 
   }
 
   @Override
-  public Quote findQuote(String symbol) throws BusinessException {
+  public Quote findQuote(String symbol) throws BusinessException{
 
     String url = UriComponentsBuilder.newInstance() // static builder
         .scheme(Protocol.HTTPS.name()) // https
@@ -163,6 +182,15 @@ public class StockServiceimpl implements StockService {
     CompanyProfile companyProfile = CompanyMapper.mapCompany(company);
     CompanyDTO companyDTO = CompanyDTOMapper.mapCompanyDTO(companyProfile, quote);
     return companyDTO;
-
   }
+
+  @Override
+  public StockPrice save(Long id, StockPrice stockPrice) {
+    Stock stock = stockRepository.findById(id) //
+        .orElseThrow(() -> new EntityNotFoundException());
+    stockPrice.setStock(stock);
+    return stockPriceRepository.save(stockPrice);
+  }
+
+
 }

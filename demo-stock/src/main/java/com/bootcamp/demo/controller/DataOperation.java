@@ -13,38 +13,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.bootcamp.demo.entity.Stock;
+import com.bootcamp.demo.entity.StockPrice;
 
 public interface DataOperation {
 
-  @GetMapping(value = "/data/stock")
-  @ResponseStatus(value = HttpStatus.OK)
-  List<Stock> findAll();
+    @PostMapping("/data/stock/{id}/price")
+    @ResponseStatus(value = HttpStatus.OK)
+    StockPrice save(@PathVariable Long id, @RequestBody StockPrice stockPrice);
 
-  @GetMapping(value = "/data/stock/country/{country}")
-  @ResponseStatus(value = HttpStatus.OK)
-  List<Stock> findByCountry(@PathVariable String country);
+    @GetMapping(value = "/data/stock")
+    @ResponseStatus(value = HttpStatus.OK)
+    List<Stock> findAll();
 
-  @GetMapping(value = "/data/stock/country/{country}/marketCap/{marketCap}")
-  @ResponseStatus(value = HttpStatus.OK)
-  List<Stock> findByCountryAndMarketCapGreaterThan( //
-      @PathVariable String country, @PathVariable double marketcap);
+    @GetMapping(value = "/data/stock/country/{country}")
+    @ResponseStatus(value = HttpStatus.OK)
+    List<Stock> findByCountry(@PathVariable String country);
 
-  @PostMapping(value = "/data/stock")
-  @ResponseStatus(value = HttpStatus.OK)
-  Stock save(@RequestBody Stock stock);
+    @GetMapping(value = "/data/stock/country/{country}/marketCap/{marketCap}")
+    @ResponseStatus(value = HttpStatus.OK)
+    List<Stock> findByCountryAndMarketCapGreaterThan( //
+            @PathVariable String country, @PathVariable double marketcap);
 
-  @DeleteMapping(value = "/data/stock/{id}")
-  @ResponseStatus(value = HttpStatus.OK)
-  void deleteById(@PathVariable Long id);
+    @PostMapping(value = "/data/stock")
+    @ResponseStatus(value = HttpStatus.OK)
+    Stock save(@RequestBody Stock stock);
 
-  @PutMapping(value = "/data/stock/{id}")
-  @ResponseStatus(value = HttpStatus.OK)
-  void updateById(@PathVariable Long id, @RequestBody Stock stock);
+    @DeleteMapping(value = "/data/stock/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    void deleteById(@PathVariable Long id);
 
-  @PatchMapping(value = "/data/stock/id/{id}/companyName/{companyName}")
-  @ResponseStatus(value = HttpStatus.OK)
-  void updateCompanyNameById(@PathVariable Long id, //
-      @PathVariable String companyName);
+    @PutMapping(value = "/data/stock/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    void updateById(@PathVariable Long id, @RequestBody Stock stock);
 
+    @PatchMapping(value = "/data/stock/id/{id}/companyName/{companyName}")
+    @ResponseStatus(value = HttpStatus.OK)
+    void updateCompanyNameById(@PathVariable Long id, //
+            @PathVariable String companyName);
 
 }
