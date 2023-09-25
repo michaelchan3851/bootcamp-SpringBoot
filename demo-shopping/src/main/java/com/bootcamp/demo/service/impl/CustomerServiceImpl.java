@@ -26,8 +26,8 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public List<Customer>  showCustomer(){
-    return CustomerDatabase.customers;
+  public List<Customer>  findAll(){
+    return CustomerDatabase.findAll();
   }
 
   @Override

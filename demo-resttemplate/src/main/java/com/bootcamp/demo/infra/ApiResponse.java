@@ -6,7 +6,8 @@ import lombok.ToString;
 public class ApiResponse<T> {
   private int code;
   private String message;
-  // attribute name same as JSON field name after serialization
+  // attribute name by default same as JSON field name after serialization
+  // @JsonProperty(value = "/status")
   private T data;
 
   public int getCode() {

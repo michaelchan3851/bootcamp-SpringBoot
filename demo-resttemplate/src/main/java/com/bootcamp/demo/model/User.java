@@ -2,8 +2,10 @@ package com.bootcamp.demo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter // Getter + No-args constructor
+@NoArgsConstructor // Jackson
 @AllArgsConstructor
 public class User {
   private long id;

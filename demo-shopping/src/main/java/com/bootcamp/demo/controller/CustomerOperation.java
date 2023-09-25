@@ -13,38 +13,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.bootcamp.demo.model.Customer;
 
-import jakarta.websocket.server.PathParam;
-
 public interface CustomerOperation {
 
-  // "/customer" -> endpoint
+    @GetMapping(value = "/customers") // noun , No verb
+    List<Customer> findAll();
 
-  @PostMapping(value = "/customer") // noun , No verb
-  Customer create(@RequestParam String name, //
-      @RequestParam String email, //
-      @RequestParam LocalDate dob);
+    // "/customer" -> endpoint
 
-  @PostMapping(value = "/customer1") // noun , No verb
-  Customer create(@RequestBody Customer customer);
+    @PostMapping(value = "/customer") // noun , No verb
+    Customer create(@RequestParam String name, //
+            @RequestParam String email, //
+            @RequestParam LocalDate dob);
 
-  @GetMapping(value = "/customer")
-  List<Customer> showCustomer();
+    @PostMapping(value = "/customer1") // noun , No verb // insert
+    Customer create(@RequestBody Customer customer);
 
-  @GetMapping(value = "/customer/{id}") // noun , No verb
-  Customer find(@PathVariable(name = "id") String customerId);
+    @GetMapping(value = "/customer/{id}") // noun , No verb
+    Customer find(@PathVariable(name = "id") String customerId);
 
-  @DeleteMapping(value = "/customer/{id}") // noun , No verb
-  Customer remove(@PathVariable(name = "id") String customerId);
+    @DeleteMapping(value = "/customer/{id}") // noun , No verb
+    Customer remove(@PathVariable(name = "id") String customerId);
 
-  @PutMapping(value = "/customer/{id}") // Put -> table PK
-  Customer update(@PathVariable(name = "id") String customerId, //
-      @RequestBody Customer customer);
+    @PutMapping(value = "/customer/{id}") // Put -> table PK
+    Customer update(@PathVariable(name = "id") String customerId, //
+            @RequestBody Customer customer);
 
-  @PatchMapping(value = "/customer/id/{id}/email/{email}") //
-  Customer patchEmail(@PathVariable(name = "id") String customerId, //
-      @PathVariable String email);
+    @PatchMapping(value = "/customer/id/{id}/email/{email}") //
+    Customer patchEmail(@PathVariable(name = "id") String customerId, //
+            @PathVariable String email);
 
-  @PatchMapping(value = "/customer/id/{id}/name/{name}") //
-  Customer patchName(@PathVariable(name = "id") String customerId, //
-      @PathVariable String name);
+    @PatchMapping(value = "/customer/id/{id}/name/{name}") //
+    Customer patchName(@PathVariable(name = "id") String customerId, //
+            @PathVariable String name);
 }

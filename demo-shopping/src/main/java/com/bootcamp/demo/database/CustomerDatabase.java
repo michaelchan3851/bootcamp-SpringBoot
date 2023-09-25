@@ -14,7 +14,7 @@ public class CustomerDatabase {
     customers.add(customer);
   }
 
-  public static List<Customer> getCustomers() {
+  public static List<Customer> findAll() {
     return customers;
   }
 

@@ -29,7 +29,6 @@ public interface StockService {
 
   void deleteById(Long id);
 
-  void deleteAll();
 
   void updateCompanyNameById(Long id, String companyName);
 

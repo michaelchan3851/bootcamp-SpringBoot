@@ -4,9 +4,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bootcamp.demo.controller.UserOperation;
 import com.bootcamp.demo.infra.ApiResponse;
 import com.bootcamp.demo.infra.Code;
+import com.bootcamp.demo.mapper.UserMapper;
 import com.bootcamp.demo.model.User;
+import com.bootcamp.demo.model.UserDTO;
 import com.bootcamp.demo.service.UserService;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,25 +23,32 @@ public class UserController implements UserOperation {
   UserService UserService;
 
   @Override
-  public ResponseEntity<ApiResponse<List<User>>> findUsers() {
+  public ResponseEntity<ApiResponse<List<UserDTO>>> findUsers() throws Exception{
     List<User> users = UserService.findUsers();
+
     if (users == null) {
-      ApiResponse<List<User>> response = ApiResponse.<List<User>>builder()//
+      ApiResponse<List<UserDTO>> response = ApiResponse.<List<UserDTO>>builder()//
           .status(Code.JPH_NOTFOUND) //
-          .data(users) //
+          .data(null) //
           .build();
       return ResponseEntity.badRequest().body(response);
     }
-    ApiResponse<List<User>> response = ApiResponse.<List<User>>builder()//
+
+    // Conversion (User -> userDTOs)
+    List<UserDTO> userDTOs = users.stream() // 
+        .map(user -> UserMapper.map(user)) //
+        .collect(Collectors.toList());
+
+    ApiResponse<List<UserDTO>> response = ApiResponse.<List<UserDTO>>builder()//
         // .status(Code.OK) // .ok()
         .ok() //
-        .data(UserService.findUsers()) //
+        .data(userDTOs) //
         .build();
     return ResponseEntity.ok().body(response);
   }
 
   @Override
-  public User findById(Long id) {
+  public User findById(Long id) throws Exception{
     try {
       return UserService.findById(id);
     } catch (NumberFormatException e) {

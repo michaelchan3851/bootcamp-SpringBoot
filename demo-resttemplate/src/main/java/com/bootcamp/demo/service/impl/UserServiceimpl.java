@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.bootcamp.demo.exception.JPHExpection;
+import com.bootcamp.demo.infra.BusinessException;
+import com.bootcamp.demo.infra.Code;
 import com.bootcamp.demo.infra.Protocol;
 import com.bootcamp.demo.model.User;
 import com.bootcamp.demo.service.UserService;
@@ -27,7 +29,7 @@ public class UserServiceimpl implements UserService { // Bean -> dependency
   private String userEndpoint; // users from yml
 
   @Override
-  public List<User> findUsers() {
+  public List<User> findUsers() throws BusinessException {
 
     String url = UriComponentsBuilder.newInstance() // static builder
         .scheme(Protocol.HTTPS.name()) // https
@@ -37,17 +39,16 @@ public class UserServiceimpl implements UserService { // Bean -> dependency
 
     System.out.println("url=" + url);
     // Invoke API + Deserialization (JSON -> Object)
-    try {
-      User[] users = restTemplate.getForObject(url, User[].class); // return type = User[].class
-      return Arrays.asList(users);
-    } catch (RestClientException e) {
-      return null;
-    }
-
+    // try {
+    User[] users = restTemplate.getForObject(url, User[].class); // return type = User[].class
+    // return Arrays.asList(users); // business logic
+    // } catch (RestClientException e) {
+    throw new JPHExpection(Code.JPH_NOTFOUND);
+    // }
   }
 
   @Override
-  public User findById(Long id) {
+  public User findById(Long id) throws BusinessException {
     return findUsers().stream()
         .filter(e -> e.getId() == id)
         .findFirst()

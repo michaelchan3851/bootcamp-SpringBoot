@@ -50,6 +50,9 @@ public class StockPrice implements Serializable {
   @Column(name = "prev_day_close", columnDefinition = "NUMERIC(15,2)")
   private double prevDayClose;
 
+  // @Column(name = "symbol")
+  // private String symbol;
+
   @ManyToOne
   // @JoinColumn(name = "stock_id", nullable = false)
   @JsonIgnore 

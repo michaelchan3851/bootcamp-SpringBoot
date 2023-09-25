@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 // Spring Test Framework -> @WebMvcTest
 // What is @SpringBootTest?
 
-// I am going test
+// I am going test the Server Start Process, with dependency checking
 @SpringBootTest // with a complete context
 // mvn clean test -> Simulate App Server Start & Bean Injection on Context
 class DemoResttempleApplicationTests {

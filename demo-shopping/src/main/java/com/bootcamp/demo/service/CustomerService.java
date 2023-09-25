@@ -12,7 +12,7 @@ public interface CustomerService {
 
   Customer create(Customer customer);
 
-  List<Customer> showCustomer();
+  List<Customer> findAll();
 
   Optional<Customer> find(long id);
 

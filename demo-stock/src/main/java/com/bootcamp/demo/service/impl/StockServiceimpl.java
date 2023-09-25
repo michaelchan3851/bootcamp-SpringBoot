@@ -97,11 +97,6 @@ public class StockServiceimpl implements StockService {
     stockRepository.deleteById(Id);
   }
 
-  @Override 
-  public void deleteAll(){
-    stockRepository.deleteAll();
-    stockPriceRepository.deleteAll();
-  }
 
   @Override
   public void updateCompanyNameById(Long id, String companyName) {

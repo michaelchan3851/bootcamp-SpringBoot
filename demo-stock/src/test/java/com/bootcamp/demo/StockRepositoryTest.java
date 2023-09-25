@@ -19,16 +19,19 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import com.bootcamp.demo.config.TestDatabaseConfig;
 import com.bootcamp.demo.entity.Stock;
+import com.bootcamp.demo.entity.StockSymbol;
 import com.bootcamp.demo.respository.StockRepository;
 
 @DataJpaTest // inject Repository related Beans
 @Import(TestDatabaseConfig.class)
 @TestPropertySource(properties = { "spring.jpa.hibernate.ddl-auto=update" })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ActiveProfiles("test")
 public class StockRepositoryTest {
 
   @Autowired

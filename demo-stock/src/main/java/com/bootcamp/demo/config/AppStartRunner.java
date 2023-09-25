@@ -2,6 +2,7 @@ package com.bootcamp.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +21,7 @@ import com.bootcamp.demo.respository.StockRepository;
 import com.bootcamp.demo.respository.StockSymbolRepository;
 import com.bootcamp.demo.service.StockService;
 
+@Profile("!test")
 @Component
 public class AppStartRunner implements CommandLineRunner {
 
@@ -47,7 +49,8 @@ public class AppStartRunner implements CommandLineRunner {
     // 1. get company profile 2 and insert into database
     // 2. get stock price and insert into database
     // Fetch data from the API
-    stockService.deleteAll();
+    stockRepository.deleteAll();
+    stockPriceRepository.deleteAll();
     try {
       // Fetch data from the API
       StockSymbol[] stockSymbols = restTemplate.getForObject(
@@ -55,7 +58,6 @@ public class AppStartRunner implements CommandLineRunner {
           StockSymbol[].class);
 
       for (StockSymbol stockSymbol : stockSymbols) {
-        System.out.println("TEST :  " + stockSymbol.getSymbol());
         Company company = stockService.findCompany(stockSymbol.getSymbol()); // Assuming stockService.findCompany() retrieves company data based on the symbol.
         CompanyProfile companyProfile = CompanyMapper.mapCompany(company);
 
@@ -66,6 +68,7 @@ public class AppStartRunner implements CommandLineRunner {
             .logo(companyProfile.getLogo())
             .marketCap(companyProfile.getMarketCap() != null ? companyProfile.getMarketCap().doubleValue() : 0.0)
             .currency(companyProfile.getCurrency())
+            // .symbol(stockSymbol.getSymbol())
             .build();
         stockRepository.save(stock);
 
@@ -76,6 +79,7 @@ public class AppStartRunner implements CommandLineRunner {
             .dayLow(quote.getL())
             .dayOpen(quote.getO())
             .prevDayClose(quote.getPc())
+            // .symbol(stockSymbol.getSymbol())
             .build();
         stockPriceRepository.save(stockPrice);
 
