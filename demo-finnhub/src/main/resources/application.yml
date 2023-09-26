@@ -32,6 +32,10 @@ spring.jpa:
   # properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
   # properties.hibernate.dialect: org.h2.Driver
   # Hibernate ddl auto (create, create-drop, validate, update)
+
+spring.data.redis:
+  host: localhost
+  port: 6379
   
 
 spring.sql.init:

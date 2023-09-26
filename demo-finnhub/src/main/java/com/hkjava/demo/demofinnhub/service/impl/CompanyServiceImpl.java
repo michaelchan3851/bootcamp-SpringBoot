@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +16,7 @@ import com.hkjava.demo.demofinnhub.entity.StockPrice;
 import com.hkjava.demo.demofinnhub.exception.FinnhubException;
 import com.hkjava.demo.demofinnhub.infra.Code;
 import com.hkjava.demo.demofinnhub.infra.Protocol;
+import com.hkjava.demo.demofinnhub.infra.RedisHelper;
 import com.hkjava.demo.demofinnhub.model.CompanyProfile;
 import com.hkjava.demo.demofinnhub.model.Quote;
 import com.hkjava.demo.demofinnhub.model.mapper.FinnhubMapper;
@@ -30,6 +32,12 @@ import jakarta.persistence.EntityNotFoundException;
 public class CompanyServiceImpl implements CompanyService {
 
   @Autowired
+  private RedisHelper<CompanyProfile> redisHelper;
+
+  @Autowired
+  private  RedisTemplate<String, CompanyProfile> redisTemplate;
+
+  @Autowired
   private RestTemplate restTemplate;
 
   @Autowired
@@ -42,7 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
   private StockRepository stockRepository;
 
   @Autowired
-  private StockPriceRepository stockPriceRepository; 
+  private StockPriceRepository stockPriceRepository;
 
   @Autowired
   private StockSymbolRepository stockSymbolRepository;
@@ -64,51 +72,50 @@ public class CompanyServiceImpl implements CompanyService {
   private String companyProfile2Endpoint;
 
   @Override
-  public void refresh() throws FinnhubException{
+  public void refresh() throws FinnhubException {
     // getCompanyProfile(String symbol)
     stockSymbolRepository.findAll().stream()
-    .forEach(symbol ->{
-      try {
-        // 2. Get Compnay Profile 2 (new)
-        CompanyProfile newProfile = 
-        this.getCompanyProfile(symbol.getSymbol());
-        // Old Stock
-        Optional<Stock> oldStock = 
-        stockRepository.findByStockSymbol(symbol);
-        // update the stock entity
-        if(oldStock.isPresent()){
-          Stock stock = oldStock.get();
-          stock.setCountry(newProfile.getCountry());
-          stock.setCompanyName(newProfile.getCompanyName());
-          stock.setIpoDate(newProfile.getIpoDate());
-          stock.setLogo(newProfile.getLogo());
-          stock.setMarketCap(newProfile.getMarketCap());
-          stock.setCurrency(newProfile.getCurrency());
-          if(newProfile != null && 
-          newProfile.getTicker().equals(symbol.getSymbol())){
-            stock.setStockStatus('A');
-          }else{
-            stock.setStockStatus('I');
+        .forEach(symbol -> {
+          try {
+            // 2. Get Compnay Profile 2 (new)
+            CompanyProfile newProfile = this.getCompanyProfile(symbol.getSymbol());
+            // Old Stock
+            Optional<Stock> oldStock = stockRepository.findByStockSymbol(symbol);
+            // update the stock entity
+            if (oldStock.isPresent()) {
+              Stock stock = oldStock.get();
+              stock.setCountry(newProfile.getCountry());
+              stock.setCompanyName(newProfile.getCompanyName());
+              stock.setIpoDate(newProfile.getIpoDate());
+              stock.setLogo(newProfile.getLogo());
+              stock.setMarketCap(newProfile.getMarketCap());
+              stock.setCurrency(newProfile.getCurrency());
+              if (newProfile != null &&
+                  newProfile.getTicker().equals(symbol.getSymbol())) {
+                stock.setStockStatus('A');
+              } else {
+                stock.setStockStatus('I');
+              }
+              stockRepository.save(stock);
+              System.out.println("completed symbol=" + symbol.getSymbol());
+
+              // Get Stock price and save a new record of price into DB
+              Quote quote = stockPriceService.getQuote(symbol.getSymbol());
+              StockPrice stockPrice = finnhubMapper.map(quote);
+              stockPrice.setStock(stock);
+              stockPriceRepository.save(stockPrice);
+              System.out.println("completed symbol=" + symbol.getSymbol());
+            } else {
+              System.out.println(symbol.getSymbol() + " is NOT FOUND.");
+            }
+          } catch (FinnhubException e) {
+            System.out
+                .println("RestClientException: Symbol" + symbol.getSymbol());
           }
-          stockRepository.save(stock);
-          System.out.println("completed symbol=" + symbol.getSymbol());
 
-          // Get Stock price and save a new record of price into DB
-          Quote quote = stockPriceService.getQuote(symbol.getSymbol());
-          StockPrice stockPrice = finnhubMapper.map(quote);
-          stockPrice.setStock(stock);
-          stockPriceRepository.save(stockPrice);
-          System.out.println("completed symbol=" + symbol.getSymbol());
-        } else {
-          System.out.println(symbol.getSymbol() + " is NOT FOUND.");
-        }
-      } catch (FinnhubException e) {
-        System.out
-            .println("RestClientException: Symbol" + symbol.getSymbol());
-      }
-
-    });
-    // select * from finnhub_stock_prices p, finnhub_stock_symbols s where s.id = p.id
+        });
+    // select * from finnhub_stock_prices p, finnhub_stock_symbols s where s.id =
+    // p.id
     // If normal response, findById, put the updated entity to DB
     // if abnormal response, patch status Entity status to 'I'
   }
@@ -167,24 +174,36 @@ public class CompanyServiceImpl implements CompanyService {
   }
 
   @Override
-  public CompanyProfile getCompanyProfile(String symbol)
-      throws FinnhubException {
-    String url = UriComponentsBuilder.newInstance() //
-        .scheme(Protocol.HTTPS.name().toLowerCase()) //
-        .host(domain) //
-        .pathSegment(baseUrl) //
-        .path(companyProfile2Endpoint) //
-        .queryParam("symbol", symbol) //
-        .queryParam("token", token) //
-        .build() //
-        .toUriString();
+  public CompanyProfile getCompanyProfile(String symbol) throws FinnhubException {
 
+    String url = UriComponentsBuilder.newInstance()
+        .scheme(Protocol.HTTPS.name().toLowerCase())
+        .host(domain)
+        .pathSegment(baseUrl)
+        .path(companyProfile2Endpoint)
+        .queryParam("symbol", symbol)
+        .queryParam("token", token)
+        .build()
+        .toUriString();
     try {
-      return restTemplate.getForObject(url, CompanyProfile.class); // mocked
+      CompanyProfile companyProfile = restTemplate.getForObject(url, CompanyProfile.class);
+      if (companyProfile != null) {
+        redisTemplate.opsForValue().set(symbol, companyProfile); 
+        return companyProfile;
+      } else {
+        Object cachedObject = redisHelper.get(symbol);
+        if (cachedObject != null && cachedObject instanceof CompanyProfile) {
+          return (CompanyProfile) cachedObject;
+        }
+      }
     } catch (RestClientException e) {
-      throw new FinnhubException(Code.FINNHUB_PROFILE2_NOTFOUND);
+      Object cachedObject = redisHelper.get(symbol);
+      if (cachedObject == null) {
+        throw new FinnhubException(Code.REDIS_SERVER_UNAVAILABLE);
+      }
     }
 
+    throw new FinnhubException(Code.FINNHUB_PROFILE2_NOTFOUND);
   }
 
 }

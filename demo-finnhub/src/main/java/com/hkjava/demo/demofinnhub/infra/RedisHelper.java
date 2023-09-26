@@ -2,6 +2,7 @@ package com.hkjava.demo.demofinnhub.infra;
 
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.client.ResourceAccessException;
 
@@ -24,6 +25,7 @@ public class RedisHelper<T> {
     } catch (Exception e) {
       throw new ResourceAccessException("Redis unavailable.");
     }
+
   }
 
   public boolean set(String key, T value, long time) {
