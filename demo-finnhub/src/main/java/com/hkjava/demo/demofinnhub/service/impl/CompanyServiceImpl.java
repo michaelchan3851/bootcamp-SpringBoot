@@ -188,7 +188,7 @@ public class CompanyServiceImpl implements CompanyService {
     try {
       CompanyProfile companyProfile = restTemplate.getForObject(url, CompanyProfile.class);
       if (companyProfile != null) {
-        redisTemplate.opsForValue().set(symbol, companyProfile); 
+        redisHelper.set(symbol, companyProfile); 
         return companyProfile;
       } else {
         Object cachedObject = redisHelper.get(symbol);
