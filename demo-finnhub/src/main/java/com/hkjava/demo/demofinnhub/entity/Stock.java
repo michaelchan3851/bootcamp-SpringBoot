@@ -29,7 +29,7 @@ import lombok.ToString;
 public class Stock implements Serializable {
 
   @Id // primary key
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // Oracle use SEQUENCE
   private Long id;
 
   private String country;
@@ -48,8 +48,14 @@ public class Stock implements Serializable {
   @Column(name = "currency")
   private String currency;
 
+  @Column(name = "status", columnDefinition = "VARCHAR(1)") // 'A', 'I'
+  private Character stockStatus;
+
   @OneToOne
   @JoinColumn(name = "symbol_id", nullable = false)
   private StockSymbol stockSymbol;
+
+
+
 
 }

@@ -1,6 +1,8 @@
 package com.hkjava.demo.demofinnhub.config;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -21,6 +23,8 @@ import com.hkjava.demo.demofinnhub.service.StockSymbolService;
 @Profile("!test")
 @Component
 public class AppStartRunner implements CommandLineRunner {
+
+  public static final List<String> stockInventory = List.of("AAPL", "MSFT", "TSLA"); //suppose in database
 
   @Autowired
   private StockSymbolService stockSymbolService;
@@ -53,21 +57,22 @@ public class AppStartRunner implements CommandLineRunner {
     stockSymbolService.deleteAll();
 
     // Call API to get all symbols
-    List<Symbol> symbols = stockSymbolService.getAllSymbols();
-    System.out.println("All Symbols are inserted.");
+    List<Symbol> symbols = stockSymbolService.getAllSymbols().stream()
+        .filter(symbol -> stockInventory.contains(symbol.getSymbol()))
+        .collect(Collectors.toList());
+    System.out.println("All Symbols are inserted. No. fo Symbols=" + symbols.size());
     // 1. Save all symbols
     stockSymbolService.save(symbols).stream() //
-        .limit(10L) // limit 10 stocks
+        // .limit(10L) // limit 10 stocks
         .forEach(symbol -> {
           try {
             // 2. Get Compnay Profile 2 and insert into database
-            CompanyProfile companyProfile =
-                companyService.getCompanyProfile(symbol.getSymbol());
+            CompanyProfile companyProfile = companyService.getCompanyProfile(symbol.getSymbol());
             Stock stock = finnhubMapper.map(companyProfile);
             stock.setStockSymbol(symbol);
             Stock storedStock = stockRepository.save(stock);
             System.out.println("completed symbol=" + symbol.getSymbol());
-            
+
             // 3. Get Stock price and insert into database
             Quote quote = stockPriceService.getQuote(symbol.getSymbol());
             StockPrice stockPrice = finnhubMapper.map(quote);
@@ -79,8 +84,9 @@ public class AppStartRunner implements CommandLineRunner {
                 .println("RestClientException: Symbol" + symbol.getSymbol());
           }
         });
-    System.out.println("10 Stocks are inserted.");
+    System.out.println("StockInventory are inserted.");
     System.out.println("CommandLineRunner Completed");
+    SchedulerTaskConfig.start = true;
   }
 
 }

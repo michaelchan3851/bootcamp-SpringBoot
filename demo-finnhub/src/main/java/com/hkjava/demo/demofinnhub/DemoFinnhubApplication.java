@@ -8,6 +8,7 @@ public class DemoFinnhubApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoFinnhubApplication.class, args);
+		System.out.println("server start completed...");
 	}
 
 }

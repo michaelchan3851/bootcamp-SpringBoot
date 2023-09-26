@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import com.hkjava.demo.demofinnhub.infra.StockRestTemplate;
+
 @Configuration
 public class AppConfig {
 
@@ -16,15 +18,20 @@ public class AppConfig {
   ModelMapper modelMapper() {
     return new ModelMapper();
   }
-
-  @Bean
-  RestTemplate restTemplate() {
-    return new RestTemplate();
-  }
   
   @Bean
   String finnhubToken() {
     return token;
+  }
+
+  @Bean 
+  StockRestTemplate stockService(RestTemplate restTemplate){
+    return new StockRestTemplate(restTemplate);
+  }
+
+  @Bean
+  RestTemplate restTemplate() { // method name -> bean name
+    return new RestTemplate();
   }
 
 }

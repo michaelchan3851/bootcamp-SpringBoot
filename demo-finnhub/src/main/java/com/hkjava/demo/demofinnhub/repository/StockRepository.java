@@ -1,11 +1,14 @@
 package com.hkjava.demo.demofinnhub.repository;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.hkjava.demo.demofinnhub.entity.Stock;
+import com.hkjava.demo.demofinnhub.entity.StockSymbol;
 
 
 @Repository
@@ -28,4 +31,5 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
   @Query(value = "select s from Stock s where s.id = :id")
   List<Stock> findAllById3(@Param(value = "id") Long id);
 
+  Optional<Stock> findByStockSymbol(StockSymbol Symbol);
 }

@@ -1,6 +1,6 @@
 server.port: 8085
 
-api:
+api: #url  
   finnhub:
     token: 'ck46ck1r01qus81pqgegck46ck1r01qus81pqgf0'
     domain: 'finnhub.io'
@@ -11,7 +11,7 @@ api:
         quote: '/quote'
         symbol: '/stock/symbol'
 
-spring.datasource:
+spring.datasource: #database
   # driverClassName: org.hibernate.dialect.PostgreSQLDialect
   driverClassName: 'org.h2.Driver'
   url: 'jdbc:h2:mem:jpademo'
