@@ -7,28 +7,41 @@ import com.hkjava.demo.demofinnhub.entity.StockSymbol;
 import com.hkjava.demo.demofinnhub.model.CompanyProfile;
 
 //@Service // Bean
-public class StockRestTemplate { // Service
+public class AppleRestClient { // Service
 
   // @Autowired
   RestTemplate restTemplate;
 
   static final String url = "xxxx";
 
-  public StockRestTemplate(){ //library
+  public AppleRestClient(){ //library
     if(restTemplate == null)
       throw new IllegalArgumentException();
     this.restTemplate = new RestTemplate();
   }
 
-  public StockRestTemplate(RestTemplate restTemplate){ //library
+  public AppleRestClient(RestTemplate restTemplate){ //library
     if(restTemplate == null)
       throw new IllegalArgumentException();
     this.restTemplate = restTemplate;
   }
 
+  public CompanyProfile invokeForCompanyProfile(String url){
+    return restTemplate.getForObject(url, CompanyProfile.class);
+  }  
+
+  public CompanyProfile[] invokeForCompanyProfileList(String url){
+    return restTemplate.getForObject(url, CompanyProfile[].class);
+  }  
+
   public CompanyProfile getProfile(String symbol) {
     //String url = "xxxx";
     return restTemplate.getForObject(url, CompanyProfile.class);
+  }
+
+  public static void main(String[] args) {
+    AppleRestClient restClient = new AppleRestClient(new RestTemplate());
+    CompanyProfile companyProfile = restClient.invokeForCompanyProfile(url);
   }
 
 }

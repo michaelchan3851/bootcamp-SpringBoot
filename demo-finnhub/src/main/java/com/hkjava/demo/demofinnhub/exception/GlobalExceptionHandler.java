@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.ResourceAccessException;
+
 import com.hkjava.demo.demofinnhub.infra.ApiResponse;
 import com.hkjava.demo.demofinnhub.infra.Code;
 import jakarta.persistence.EntityNotFoundException;
@@ -44,6 +46,8 @@ public class GlobalExceptionHandler {
       return Code.IAE_EXCEPTION;
     } else if (e instanceof EntityNotFoundException) {
       return Code.ENTITY_NOT_FOUND;
+    } else if(e instanceof ResourceAccessException){
+      return Code.REDIS_SERVER_UNAVAILABLE;
     }
     // ...
     return null;

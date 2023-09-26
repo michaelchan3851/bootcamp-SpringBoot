@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.hkjava.demo.demofinnhub.infra.StockRestTemplate;
+import com.hkjava.demo.demofinnhub.infra.AppleRestClient;
 
 @Configuration
 public class AppConfig {
@@ -25,8 +25,8 @@ public class AppConfig {
   }
 
   @Bean 
-  StockRestTemplate stockService(RestTemplate restTemplate){
-    return new StockRestTemplate(restTemplate);
+  AppleRestClient stockService(RestTemplate restTemplate){
+    return new AppleRestClient(restTemplate);
   }
 
   @Bean
