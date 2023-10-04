@@ -1,9 +1,16 @@
 package com.hkjava.demo.demofinnhub.infra;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class ApiResponse<T> {
   // attribute name by default same as JSON field name after serialziation
+  @Schema(description = "Code For System Response Cat")
   private int code;
+
+  @Schema(description = "Message to indicate error")
   private String message;
+
+  @Schema(description = "Response Data Body")
   private T data;
 
   public int getCode() {

@@ -12,7 +12,7 @@ import com.hkjava.demo.demofinnhub.entity.StockPrice;
 import com.hkjava.demo.demofinnhub.exception.FinnhubException;
 import com.hkjava.demo.demofinnhub.infra.Code;
 import com.hkjava.demo.demofinnhub.infra.Protocol;
-import com.hkjava.demo.demofinnhub.model.Quote;
+import com.hkjava.demo.demofinnhub.model.dto.finnhub.resp.QuoteDTO;
 import com.hkjava.demo.demofinnhub.repository.StockPriceRepository;
 import com.hkjava.demo.demofinnhub.repository.StockRepository;
 import com.hkjava.demo.demofinnhub.service.StockPriceService;
@@ -44,7 +44,7 @@ public class StockPriceServiceImpl implements StockPriceService {
   private String quoteEndpoint;
 
   @Override
-  public Quote getQuote(String symbol) throws FinnhubException {
+  public QuoteDTO getQuote(String symbol) throws FinnhubException {
     String url = UriComponentsBuilder.newInstance() //
         .scheme(Protocol.HTTPS.name()) //
         .host(domain) //
@@ -56,7 +56,7 @@ public class StockPriceServiceImpl implements StockPriceService {
         .toUriString();
     System.out.println("url=" + url);
     try {
-      return restTemplate.getForObject(url, Quote.class);
+      return restTemplate.getForObject(url, QuoteDTO.class);
     } catch (RestClientException e) {
       throw new FinnhubException(Code.FINNHUB_QUOTE_NOTFOUND);
     }

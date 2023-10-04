@@ -6,7 +6,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @TestConfiguration
@@ -25,7 +24,7 @@ public class TestDatabaseConfig {
   }
 
   @Bean
-  ObjectMapper objectMapper(){
+  ObjectMapper objectMapper() {
     return new ObjectMapper();
   }
   

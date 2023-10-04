@@ -19,6 +19,7 @@ public enum Code {
   // RuntimeException: 90000 - 99999
   IAE_EXCEPTION(90000, "Illegal Argument Exception."), //
   ENTITY_NOT_FOUND(90001, "Entity Not Found."), //
+  VALIDATOR_FAIL(90002, "Validator Fail.")
   ;
 
   private int code;

@@ -1,4 +1,4 @@
-package com.hkjava.demo.demofinnhub.model;
+package com.hkjava.demo.demofinnhub.model.dto.finnhub.resp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Quote {
+public class QuoteDTO {
 
   @JsonProperty(value = "c")
   private double currentPrice;

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.hkjava.demo.demofinnhub.model.CompanyProfile;
+import com.hkjava.demo.demofinnhub.model.dto.finnhub.resp.CompanyProfile2DTO;
 
 public class DeserializationForRestTemplateTest {
 
@@ -24,12 +24,11 @@ public class DeserializationForRestTemplateTest {
     objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
 
-  // test Serialization
   @Test
   void testDeserializationForRestTemplate() throws JsonProcessingException {
     // JSON -> Object
-    CompanyProfile companyProfile = CompanyProfile.builder()
-        .companyName("ABC Company") //
+    CompanyProfile2DTO companyProfile = CompanyProfile2DTO.builder() //
+        .companyName("APPL Company") //
         .country("US") //
         .currency("USD") //
         .estimateCurrency("USD") //
@@ -40,24 +39,29 @@ public class DeserializationForRestTemplateTest {
         .logo("/abc.png") //
         .phone("123456789") //
         .shareOutstanding(23.90) //
-        .ticker("AAPL") //
+        .ticker("APPL") //
         .build();
-    String mockedResponseInJson = objectMapper.writeValueAsString(companyProfile);
+
+    // test Serialization
+    String mockedResponseInJson =
+        objectMapper.writeValueAsString(companyProfile);
     System.out.println("json=" + mockedResponseInJson);
-    JsonNode jsonNode = objectMapper.readTree(mockedResponseInJson);
     // json={"country":"US","currency":"USD","estimateCurrency":"USD",
     // "exchange":"XYZ","finnhubIndustry":"IJK","logo":"/abc.png",
-    // "phone":"123456789","shareOutstanding":23.9,"ticker":"AAPL",
+    // "phone":"123456789","shareOutstanding":23.9,"ticker":"APPL",
     // "weburl":null,"ipo":"1988-12-31","marketCapitalization":3000.12,
-    // "name":"ABC Company"}
-    assertThat(jsonNode.path("country").asText(), is("US"));
-    assertThat(jsonNode.path("ipo").asText(), is("1988-12-31"));
-    assertThat(jsonNode.path("marketCapitalization").asDouble(), is(3000.12));
+    // "name":"APPL Company"}
+    // JsonNode jsonNode = objectMapper.readTree(mockedResponseInJson);
+    // assertThat(jsonNode.path("country").asText(), is("US"));
+    // assertThat(jsonNode.path("ipo").asText(), is("1988-12-31"));
+    // assertThat(jsonNode.path("marketCapitalization").asDouble(), is(3000.12));
 
-    // Test Deserialization (main code -> automation)
-    CompanyProfile afterCompanyProfile = objectMapper.readValue(mockedResponseInJson, CompanyProfile.class);
+    // test Deserilaizationn (main code -> automation)
+    CompanyProfile2DTO afterCompanyProfile =
+        objectMapper.readValue(mockedResponseInJson, CompanyProfile2DTO.class);
+        
     assertEquals(true,
-        afterCompanyProfile.getIpoDate().equals(companyProfile.getIpoDate())); // "1988-12-31"
+        afterCompanyProfile.getIpoDate().equals(companyProfile.getIpoDate()));
     assertEquals(true,
         afterCompanyProfile.getMarketCap() == companyProfile.getMarketCap());
     assertEquals(true,
@@ -66,8 +70,10 @@ public class DeserializationForRestTemplateTest {
 
   @Test
   void testSerializationForRestTemplate() throws JsonProcessingException {
-    CompanyProfile companyProfile = CompanyProfile.builder()
-        .companyName("ABC Company") //
+    // readTree to prove the conversion is correct
+    // JSON -> Object
+    CompanyProfile2DTO companyProfile = CompanyProfile2DTO.builder() //
+        .companyName("APPL Company") //
         .country("US") //
         .currency("USD") //
         .estimateCurrency("USD") //
@@ -78,20 +84,17 @@ public class DeserializationForRestTemplateTest {
         .logo("/abc.png") //
         .phone("123456789") //
         .shareOutstanding(23.90) //
-        .ticker("AAPL") //
+        .ticker("APPL") //
         .build();
-    String mockedResponseInJson = objectMapper.writeValueAsString(companyProfile);
+
+    // test Serialization
+    String mockedResponseInJson =
+        objectMapper.writeValueAsString(companyProfile);
     System.out.println("json=" + mockedResponseInJson);
     JsonNode jsonNode = objectMapper.readTree(mockedResponseInJson);
-    // json={"country":"US","currency":"USD","estimateCurrency":"USD",
-    // "exchange":"XYZ","finnhubIndustry":"IJK","logo":"/abc.png",
-    // "phone":"123456789","shareOutstanding":23.9,"ticker":"AAPL",
-    // "weburl":null,"ipo":"1988-12-31","marketCapitalization":3000.12,
-    // "name":"ABC Company"}
     assertThat(jsonNode.path("country").asText(), is("US"));
     assertThat(jsonNode.path("ipo").asText(), is("1988-12-31"));
     assertThat(jsonNode.path("marketCapitalization").asDouble(), is(3000.12));
-
   }
 
 }

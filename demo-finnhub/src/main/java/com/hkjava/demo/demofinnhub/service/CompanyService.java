@@ -1,17 +1,13 @@
 package com.hkjava.demo.demofinnhub.service;
 
 import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.hkjava.demo.demofinnhub.entity.Stock;
 import com.hkjava.demo.demofinnhub.exception.FinnhubException;
-import com.hkjava.demo.demofinnhub.model.CompanyProfile;
-
+import com.hkjava.demo.demofinnhub.model.dto.finnhub.resp.CompanyProfile2DTO;
 
 public interface CompanyService {
 
-  CompanyProfile getCompanyProfile(String symbol) throws FinnhubException;
+  CompanyProfile2DTO getCompanyProfile(String symbol) throws FinnhubException;
 
   void refresh() throws FinnhubException;
 

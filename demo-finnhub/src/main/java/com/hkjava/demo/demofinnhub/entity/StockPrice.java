@@ -2,9 +2,6 @@ package com.hkjava.demo.demofinnhub.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import org.springframework.stereotype.Component;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +22,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Component
 @Builder
 public class StockPrice implements Serializable {
 

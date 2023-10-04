@@ -7,5 +7,4 @@ import com.hkjava.demo.demofinnhub.entity.StockPrice;
 @Repository
 public interface StockPriceRepository extends JpaRepository<StockPrice, Long> {
 
-
 }

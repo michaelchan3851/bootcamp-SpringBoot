@@ -17,7 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import com.hkjava.demo.demofinnhub.entity.Stock;
 import com.hkjava.demo.demofinnhub.exception.FinnhubException;
-import com.hkjava.demo.demofinnhub.model.CompanyProfile;
+import com.hkjava.demo.demofinnhub.infra.RedisHelper;
+import com.hkjava.demo.demofinnhub.model.dto.finnhub.resp.CompanyProfile2DTO;
 import com.hkjava.demo.demofinnhub.repository.StockRepository;
 import com.hkjava.demo.demofinnhub.service.CompanyService;
 
@@ -30,6 +31,9 @@ public class CompanyServiceTest {
 
   @MockBean // service will autowird repository
   private RestTemplate restTemplate;
+
+  @MockBean // service will autowird repository
+  private RedisHelper redisHelper;
 
   @Autowired // service will autowird repository
   private String finnhubToken;
@@ -55,15 +59,41 @@ public class CompanyServiceTest {
     String expectedUrl =
         "https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token="
             .concat(finnhubToken);
-    CompanyProfile mockedCompanyProfile = CompanyProfile.builder() //
+    CompanyProfile2DTO mockedCompanyProfile = CompanyProfile2DTO.builder() //
         .country("US") //
         .ipoDate(LocalDate.of(1988, 12, 31)) //
         .build();
-    Mockito.when(restTemplate.getForObject(expectedUrl, CompanyProfile.class))
+
+    Mockito.when(restTemplate.getForObject(expectedUrl, CompanyProfile2DTO.class))
         .thenReturn(mockedCompanyProfile);
-    CompanyProfile profile = companyService.getCompanyProfile("AAPL"); // call stockRepository.findAll()
+
+    Mockito.when(redisHelper.set("AAPL", mockedCompanyProfile, 600000000))
+        .thenReturn(true);
+    System.out.println("test companyService=");
+    CompanyProfile2DTO profile = companyService.getCompanyProfile("AAPL"); // call stockRepository.findAll()
+    System.out.println("profile=" + profile);
     assertThat(profile, hasProperty("country", equalTo("US")));
   }
+
+  // @Test
+  // void testUrl1ByUri2() throws FinnhubException {
+  //   String expectedUrl =
+  //       "https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token="
+  //           .concat(finnhubToken);
+  //   CompanyProfile mockedCompanyProfile = CompanyProfile.builder() //
+  //       .country("CN") //
+  //       .ipoDate(LocalDate.of(1988, 12, 31)) //
+  //       .build();
+  //   Mockito.when(restTemplate.getForObject(expectedUrl, CompanyProfile.class))
+  //       .thenReturn(null);
+
+  //   Mockito.when(redisHelper.get("AAPL")).thenReturn(mockedCompanyProfile);
+
+  //   System.out.println("test companyService=");
+  //   CompanyProfile profile = companyService.getCompanyProfile("AAPL"); // call stockRepository.findAll()
+  //   System.out.println("profile=" + profile);
+  //   assertThat(profile, hasProperty("country", equalTo("CN")));
+  // }
 
 
 }

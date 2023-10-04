@@ -14,7 +14,8 @@ import com.hkjava.demo.demofinnhub.entity.StockSymbol;
 import com.hkjava.demo.demofinnhub.exception.FinnhubException;
 import com.hkjava.demo.demofinnhub.infra.Code;
 import com.hkjava.demo.demofinnhub.infra.Protocol;
-import com.hkjava.demo.demofinnhub.model.Symbol;
+import com.hkjava.demo.demofinnhub.model.dto.finnhub.resp.QuoteDTO;
+import com.hkjava.demo.demofinnhub.model.dto.finnhub.resp.SymbolDTO;
 import com.hkjava.demo.demofinnhub.model.mapper.FinnhubMapper;
 import com.hkjava.demo.demofinnhub.repository.StockSymbolRepository;
 import com.hkjava.demo.demofinnhub.service.StockSymbolService;
@@ -45,7 +46,7 @@ public class StockSymbolServiceImpl implements StockSymbolService {
   private String symbolEndpoint;
 
   @Override
-  public List<Symbol> getAllSymbols() throws FinnhubException {
+  public List<SymbolDTO> getAllSymbols() throws FinnhubException {
     String url = UriComponentsBuilder.newInstance() //
         .scheme(Protocol.HTTPS.name()) //
         .host(domain) //
@@ -57,7 +58,7 @@ public class StockSymbolServiceImpl implements StockSymbolService {
         .toUriString();
     System.out.println("url=" + url);
     try {
-      Symbol[] symbols = restTemplate.getForObject(url, Symbol[].class);
+      SymbolDTO[] symbols = restTemplate.getForObject(url, SymbolDTO[].class);
       return Arrays.asList(symbols);
     } catch (RestClientException e) {
       throw new FinnhubException(Code.FINNHUB_QUOTE_NOTFOUND);
@@ -65,7 +66,7 @@ public class StockSymbolServiceImpl implements StockSymbolService {
   }
 
   @Override
-  public List<StockSymbol> save(List<Symbol> symbols) {
+  public List<StockSymbol> save(List<SymbolDTO> symbols) {
     // Convert from Symbols to StockSymbols
     List<StockSymbol> stockSymbols = symbols.stream() //
         .filter(s -> "Common Stock".equals(s.getType()))

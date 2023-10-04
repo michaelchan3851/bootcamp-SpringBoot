@@ -2,22 +2,19 @@ package com.hkjava.demo.demofinnhub.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hkjava.demo.demofinnhub.infra.AppleRestClient;
 import com.hkjava.demo.demofinnhub.infra.RedisHelper;
-import com.hkjava.demo.demofinnhub.model.CompanyProfile;
+import com.hkjava.demo.demofinnhub.infra.RedisObjectMapper;
 
 @Configuration
+@EnableCaching
 public class AppConfig {
 
   @Value(value = "${api.finnhub.token}")
@@ -27,7 +24,7 @@ public class AppConfig {
   ModelMapper modelMapper() {
     return new ModelMapper();
   }
-
+  
   @Bean
   String finnhubToken() {
     return token;
@@ -38,50 +35,46 @@ public class AppConfig {
     return new AppleRestClient(restTemplate);
   }
 
-  // @Bean
-  // public RedisConnectionFactory redisConnectionFactory() {
-  // JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-  // // Configure the connection factory, e.g., set host, port, and other
-  // properties
-  // jedisConnectionFactory.setHostName("localhost"); // Set your Redis server
-  // host
-  // jedisConnectionFactory.setPort(6379); // Set your Redis server port
-  // // You can set other properties like password, etc. if needed
-
-  // return jedisConnectionFactory;
-  // }
-
   @Bean
-  RestTemplate restTemplate() { // method name -> bean name
+  RestTemplate restTemplate() {
     return new RestTemplate();
   }
+  
 
   // @Bean
-  // RedisTemplate<String, CompanyProfile> redisTemplate() { // method name ->
-  // bean name
-  // return new RedisTemplate<String, CompanyProfile>();
-  // }
-
-  // @Bean
-  // RedisHelper<CompanyProfile> redisHelper(RedisTemplate<String, CompanyProfile>
-  // redisTemplate) {
-  // return new RedisHelper<CompanyProfile>(redisTemplate);
+  // RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+  // RedisTemplate<String, Object> template = new RedisTemplate<>();
+  // template.setConnectionFactory(factory);
+  // return template;
   // }
 
   @Bean
-  public RedisTemplate<String, CompanyProfile> redisTemplate(RedisConnectionFactory redisConnectionFactory,
-      ObjectMapper objectMapper) {
-    RedisTemplate<String, CompanyProfile> redisTemplate = new RedisTemplate<>();
-    redisTemplate.setConnectionFactory(redisConnectionFactory);
-    redisTemplate.setKeySerializer(new StringRedisSerializer());
-    redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(CompanyProfile.class));
-    ((Jackson2JsonRedisSerializer<?>) redisTemplate.getValueSerializer()).setObjectMapper(objectMapper);
-    return redisTemplate;
+  ObjectMapper redisObjectMapper() {
+    return RedisObjectMapper.of();
   }
 
   @Bean
-  RedisHelper<CompanyProfile> redisHelper(
-      RedisTemplate<String, CompanyProfile> redisTemplate) {
-    return new RedisHelper<>(redisTemplate);
+  RedisHelper redisProfileHelper(RedisConnectionFactory factory,
+      ObjectMapper redisObjectMapper) {
+    return new RedisHelper(factory, redisObjectMapper);
   }
+
+
+  // @Bean
+  // RedisTemplate<String, Object> redisProfileTemplate(
+  // RedisConnectionFactory factory, ObjectMapper redisObjectMapper) { // method name -> bean name
+  // RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+  // redisTemplate.setConnectionFactory(factory);
+  // redisTemplate.setKeySerializer(RedisSerializer.string());
+  // redisTemplate.setValueSerializer(RedisSerializer.json());
+  // // redisTemplate.setHashKeySerializer(RedisSerializer.string());
+  // // redisTemplate.setHashValueSerializer(RedisSerializer.json());
+  // redisTemplate.afterPropertiesSet();
+  // Jackson2JsonRedisSerializer<Object> serializer =
+  // new Jackson2JsonRedisSerializer<>(Object.class);
+  // serializer.setObjectMapper(redisObjectMapper);
+  // redisTemplate.setValueSerializer(serializer);
+  // return redisTemplate;
+  // }
+
 }
