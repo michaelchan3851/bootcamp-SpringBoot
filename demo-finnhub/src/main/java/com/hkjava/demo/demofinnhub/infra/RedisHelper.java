@@ -7,20 +7,22 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.web.client.ResourceAccessException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 public class RedisHelper {
 
   // key value pair, key must be unqiue, most likely String
   private RedisTemplate<String, Object> redisTemplate;
 
-  public RedisHelper(RedisTemplate<String, Object> redisTemplate) {
-    this.redisTemplate = redisTemplate;
-  }
-
-  public RedisHelper(RedisConnectionFactory factory,
-      ObjectMapper redisObjectMapper) {
-    this.redisTemplate = template(factory, redisObjectMapper);
-  }
+  public RedisHelper(RedisConnectionFactory factory) {
+    ObjectMapper objectMapper = new ObjectMapper() //
+            .registerModule(new ParameterNamesModule())
+            .registerModule(new Jdk8Module()) //
+            .registerModule(new JavaTimeModule());
+    this.redisTemplate = template(factory, objectMapper);
+}
 
   public static RedisTemplate<String, Object> template(
       RedisConnectionFactory factory, ObjectMapper redisObjectMapper) { // method name -> bean name

@@ -15,6 +15,10 @@ public class TranDayTime {
 
   private LocalDateTime datetime;
 
+  public TranDayTime(String dateInString) {
+    this.datetime = LocalDate.parse(dateInString).atStartOfDay();
+  }
+
   // Assume Friday is not holiday
   public boolean isWeeklyClose() {
     return datetime.getDayOfWeek() == DayOfWeek.FRIDAY;

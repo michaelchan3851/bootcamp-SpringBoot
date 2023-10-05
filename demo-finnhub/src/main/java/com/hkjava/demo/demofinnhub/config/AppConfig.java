@@ -31,14 +31,21 @@ public class AppConfig {
   }
 
   @Bean
-  AppleRestClient stockService(RestTemplate restTemplate) {
-    return new AppleRestClient(restTemplate);
-  }
-
-  @Bean
   RestTemplate restTemplate() {
     return new RestTemplate();
   }
+
+  @Bean
+  RedisHelper redisProfileHelper(RedisConnectionFactory factory) {
+    return new RedisHelper(factory);
+  }
+
+  // @Bean
+  // AppleRestClient stockService(RestTemplate restTemplate) {
+  //   return new AppleRestClient(restTemplate);
+  // }
+
+
   
 
   // @Bean
@@ -48,16 +55,10 @@ public class AppConfig {
   // return template;
   // }
 
-  @Bean
-  ObjectMapper redisObjectMapper() {
-    return RedisObjectMapper.of();
-  }
-
-  @Bean
-  RedisHelper redisProfileHelper(RedisConnectionFactory factory,
-      ObjectMapper redisObjectMapper) {
-    return new RedisHelper(factory, redisObjectMapper);
-  }
+  // @Bean
+  // ObjectMapper redisObjectMapper() {
+  //   return RedisObjectMapper.of();
+  // }
 
 
   // @Bean

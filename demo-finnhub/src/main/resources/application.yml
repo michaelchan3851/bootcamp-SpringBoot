@@ -49,7 +49,7 @@ spring.sql.init:
   platform: h2
   # schema-locations: classpath:ddl/DDL_DROPS.sql, classpath:ddl/DDL_TUSERS.sql, classpath:ddl/DDL_TPOSTS.sql
 
-spring.profiles.active: enableScheduling
+#spring.profiles.active: enableScheduling
 
 #這樣寫的話，原本內建的/actuator/xxx路徑，都會變成/data/xxx，可以用來防止被其他人猜到
 management.endpoints.web.base-path: /data

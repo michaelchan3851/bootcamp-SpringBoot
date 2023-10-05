@@ -210,5 +210,25 @@ public class CompanyServiceImpl implements CompanyService {
         throw new FinnhubException(Code.FINNHUB_PROFILE2_NOTFOUND);
       return profileFromRedis;
     }
+  //   try {
+  //     CompanyProfile companyProfile = restTemplate.getForObject(url, CompanyProfile.class); // deserialization
+  //     if (companyProfile != null) {
+  //       redisHelper.set(symbol, companyProfile); 
+  //       return companyProfile;
+  //     } else {
+  //       Object cachedObject = redisHelper.get(symbol);
+  //       if (cachedObject != null && cachedObject instanceof CompanyProfile) {
+  //         return (CompanyProfile) cachedObject;
+  //       }
+  //     }
+  //   } catch (RestClientException e) {
+  //     Object cachedObject = redisHelper.get(symbol);
+  //     if (cachedObject == null) {
+  //       throw new FinnhubException(Code.REDIS_SERVER_UNAVAILABLE);
+  //     }
+  //   }
+
+  //   throw new FinnhubException(Code.FINNHUB_PROFILE2_NOTFOUND);
+  // }
   }
 }
