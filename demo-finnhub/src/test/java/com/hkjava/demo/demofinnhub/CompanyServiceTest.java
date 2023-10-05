@@ -32,7 +32,8 @@ public class CompanyServiceTest {
   @MockBean // service will autowird repository
   private RestTemplate restTemplate;
 
-  @MockBean // service will autowird repository
+  // SpringBootTest already autowired reidsHelper, but want to mock fake set/get
+  @MockBean 
   private RedisHelper redisHelper;
 
   @Autowired // service will autowird repository
@@ -67,8 +68,10 @@ public class CompanyServiceTest {
     Mockito.when(restTemplate.getForObject(expectedUrl, CompanyProfile2DTO.class))
         .thenReturn(mockedCompanyProfile);
 
-    Mockito.when(redisHelper.set("AAPL", mockedCompanyProfile, 600000000))
+    // Mock the fake set behaviour for redis 
+    Mockito.when(redisHelper.set("demo-finnhub:companyprofile2:AAPL", mockedCompanyProfile, 600000000))
         .thenReturn(true);
+
     System.out.println("test companyService=");
     CompanyProfile2DTO profile = companyService.getCompanyProfile("AAPL"); // call stockRepository.findAll()
     System.out.println("profile=" + profile);
@@ -87,6 +90,7 @@ public class CompanyServiceTest {
   //   Mockito.when(restTemplate.getForObject(expectedUrl, CompanyProfile.class))
   //       .thenReturn(null);
 
+  // Mock the fake set behaviour for redis 
   //   Mockito.when(redisHelper.get("AAPL")).thenReturn(mockedCompanyProfile);
 
   //   System.out.println("test companyService=");

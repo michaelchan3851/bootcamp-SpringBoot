@@ -17,8 +17,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.boot.context.properties.PropertyMapper.Source;
-import com.hkjava.demo.demofinnhub.model.Price;
-import com.hkjava.demo.demofinnhub.model.SourcePoint;
+import com.hkjava.demo.demofinnhub.model.graph.Price;
+import com.hkjava.demo.demofinnhub.model.graph.SourcePoint;
 
 public class LineTest {
 

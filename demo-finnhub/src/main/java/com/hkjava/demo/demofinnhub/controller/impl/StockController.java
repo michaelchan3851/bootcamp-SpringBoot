@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hkjava.demo.demofinnhub.config.AppStartRunner;
 import com.hkjava.demo.demofinnhub.controller.StockOperation;
 import com.hkjava.demo.demofinnhub.exception.FinnhubException;
-import com.hkjava.demo.demofinnhub.infra.ApiResponse;
+import com.hkjava.demo.demofinnhub.infra.ApiResp;
 import com.hkjava.demo.demofinnhub.model.dto.web.req.SymbolReqDTO;
 import com.hkjava.demo.demofinnhub.model.dto.web.resp.StockDTO;
 import com.hkjava.demo.demofinnhub.service.WebStockService;
@@ -19,10 +19,10 @@ public class StockController implements StockOperation {
   private WebStockService webStockService;
 
   @Override
-  public ApiResponse<StockDTO> stockInfo(SymbolReqDTO symbol)
+  public ApiResp<StockDTO> stockInfo(SymbolReqDTO symbol)
       throws FinnhubException {
         
-    return ApiResponse.<StockDTO>builder() //
+    return ApiResp.<StockDTO>builder() //
         .ok() //
         .data(webStockService.stockInfo(symbol.getSymbol())) //
         .build();

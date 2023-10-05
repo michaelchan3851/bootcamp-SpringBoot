@@ -1,4 +1,4 @@
-package com.hkjava.demo.demofinnhub.model;
+package com.hkjava.demo.demofinnhub.model.graph;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -197,7 +197,7 @@ public class CompanyServiceImpl implements CompanyService {
       CompanyProfile2DTO profile =
           restTemplate.getForObject(url, CompanyProfile2DTO.class); // mocked
       if (Objects.nonNull(profile)) { // success
-        redisHelper.set(key, profile, 600000000);
+        redisHelper.set(key, profile, 600000000); // testing suppose not real set in production, so we should mock
       } else { // fail, get from redis
         profile = (CompanyProfile2DTO) redisHelper.get(key);
         if (profile == null)

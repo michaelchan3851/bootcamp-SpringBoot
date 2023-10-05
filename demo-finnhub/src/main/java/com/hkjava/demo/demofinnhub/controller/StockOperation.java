@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.hkjava.demo.demofinnhub.entity.Stock;
 import com.hkjava.demo.demofinnhub.exception.FinnhubException;
-import com.hkjava.demo.demofinnhub.infra.ApiResponse;
+import com.hkjava.demo.demofinnhub.infra.ApiResp;
 import com.hkjava.demo.demofinnhub.model.dto.web.req.SymbolReqDTO;
 import com.hkjava.demo.demofinnhub.model.dto.web.resp.StockDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +34,7 @@ public interface StockOperation {
           content = {@Content(schema = @Schema())})})
   @GetMapping(value = "/stock")
   @ResponseStatus(value = HttpStatus.OK)
-  ApiResponse<StockDTO> stockInfo(
+  ApiResp<StockDTO> stockInfo(
       // @SymbolCheck
       @RequestParam("symbol") SymbolReqDTO symbol) throws FinnhubException;
 

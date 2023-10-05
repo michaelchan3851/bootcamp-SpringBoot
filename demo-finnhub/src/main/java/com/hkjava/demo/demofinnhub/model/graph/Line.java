@@ -1,4 +1,4 @@
-package com.hkjava.demo.demofinnhub.model;
+package com.hkjava.demo.demofinnhub.model.graph;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,6 +40,12 @@ public class Line {
           closePoints.add(s.toPoint());
         });
   }
+  // [10.0, 23/9], [11.0, 24/9], [12.0, 25/9], [13.0, 26/9], [14.0, 27/9]
+  // [20.0, 28/9], [20.0, 29/9], [20.0, 30/9], [20.0, 1/10], [20.0, 2/10]
+
+  // 5-day moving average
+  // [12.0, 27/9],[14.0, 28/9], [15.8, 29/9], [17.4, 30/9], [18.8, 1/10]
+  // [20.0, 2/10]
 
   // instance method -> calculate
   public List<Point> movingAverage(int noOfInterval) {
@@ -64,6 +70,20 @@ public class Line {
     }
     return moveAverages;
   }
+
+//   public List<Point> movingAverage(int noOfInterval) {
+//     return IntStream.range(0, closePoints.size() - noOfInterval + 1)
+//             .mapToObj(i -> {
+//                 BigDecimal sum = BigDecimal.valueOf(closePoints.subList(i, i + noOfInterval)
+//                         .stream()
+//                         .mapToDouble(point -> point.getClosePrice().getPrice())
+//                         .sum());
+//                 BigDecimal average = sum.divide(BigDecimal.valueOf(noOfInterval), 2, RoundingMode.HALF_UP);
+//                 return new Point(average.doubleValue(), closePoints.get(i + noOfInterval - 1).getTranDateTime());
+//             })
+//             .collect(Collectors.toList());
+// }
+
 
   // Override the Getter
   public List<Point> getClosePoints() {

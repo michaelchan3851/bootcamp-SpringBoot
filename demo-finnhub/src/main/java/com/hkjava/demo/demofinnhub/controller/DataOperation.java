@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.hkjava.demo.demofinnhub.entity.Stock;
 import com.hkjava.demo.demofinnhub.entity.StockPrice;
+import com.hkjava.demo.demofinnhub.infra.ApiResp;
+
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,7 +29,7 @@ public interface DataOperation {
       tags = "Save a Stock")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
-          content = {@Content(schema = @Schema(implementation = Stock.class),
+          content = {@Content(schema = @Schema(implementation = ApiResp.class),
               mediaType = "application/json")}),
       @ApiResponse(responseCode = "404",
           content = {@Content(schema = @Schema())}),
@@ -42,7 +44,7 @@ public interface DataOperation {
       tags = "Find All Stock")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
-          content = {@Content(schema = @Schema(implementation = Stock.class),
+          content = {@Content(schema = @Schema(implementation = ApiResp.class),
               mediaType = "application/json")}),
       @ApiResponse(responseCode = "404",
           content = {@Content(schema = @Schema())}),
@@ -57,7 +59,7 @@ public interface DataOperation {
   List<Stock> findByCountryAndMarketCap(@PathVariable String country,
       @PathVariable double marketCap);
 
-  @Hidden
+  @Hidden //sercurity for hidden, 
   @DeleteMapping(value = "/data/stock/{id}")
   @ResponseStatus(value = HttpStatus.OK)
   void deleteById(@PathVariable Long id);

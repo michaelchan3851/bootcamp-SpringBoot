@@ -1,4 +1,4 @@
-package com.hkjava.demo.demofinnhub.model;
+package com.hkjava.demo.demofinnhub.model.graph;
 
 public enum Interval {
   DAY, //
