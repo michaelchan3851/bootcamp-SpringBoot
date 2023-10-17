@@ -5,16 +5,16 @@ import java.time.LocalDateTime;
 import com.stock.stocktradeapp.dto.req.PlaceOrderDTO;
 import com.stock.stocktradeapp.dto.resp.OrderBookDTO;
 import com.stock.stocktradeapp.model.Order;
-import com.stock.stocktradeapp.model.OrderBook;
+import com.stock.stocktradeapp.model.Stock;
 
 public class StockMapper {
 
   // TBC. sort by Price
-  public static OrderBookDTO map(String symbol, OrderBook book) {
+  public static OrderBookDTO map(String symbol, Stock book) {
     return OrderBookDTO.builder() //
         .symbol(symbol) //
-        .buyBook(book.getBuyBook().stream().collect(toList())) //
-        .sellBook(book.getSellBook().stream().collect(toList())) //
+        .buyBook(book.getBuyBook().reversed()) //
+        .sellBook(book.getSellBook().reversed()) //
         .build();
   }
 

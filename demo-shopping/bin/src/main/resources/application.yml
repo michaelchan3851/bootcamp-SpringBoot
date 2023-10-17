@@ -1,0 +1,4 @@
+api:
+  jsonplaceholder:
+    domain: "https://jsonplaceholder.typicode.com"
+    endpoint: "/users"

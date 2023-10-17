@@ -1,0 +1,8 @@
+server:
+  port: 8083
+
+api:
+  jmeter:
+    domain: 'demo-jmeter-test:8084'
+    basePath: 'v1'
+    endpoint: '/jmeter'

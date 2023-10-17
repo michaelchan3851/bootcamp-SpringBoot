@@ -8,7 +8,7 @@ import com.stock.stocktradeapp.data.Book;
 import com.stock.stocktradeapp.dto.req.PlaceOrderDTO;
 import com.stock.stocktradeapp.dto.resp.OrderBookDTO;
 import com.stock.stocktradeapp.model.Order;
-import com.stock.stocktradeapp.model.OrderBook;
+import com.stock.stocktradeapp.model.Stock;
 import com.stock.stocktradeapp.model.User;
 import com.stock.stocktradeapp.service.OrderBookService;
 
@@ -16,8 +16,8 @@ import com.stock.stocktradeapp.service.OrderBookService;
 public class OrderBookServiceImpl implements OrderBookService {
 
   @Override
-  public OrderBook orderBook(String symbol) {
-    return OrderBook.getData(symbol);
+  public Stock orderBook(String symbol) {
+    return Stock.getStock(symbol);
   }
 
   @Override

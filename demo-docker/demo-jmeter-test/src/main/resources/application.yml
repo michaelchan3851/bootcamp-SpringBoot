@@ -1,0 +1,18 @@
+# docker-compose.yml
+version: '2.17'
+
+services:
+  demo-junit-test:
+    image: demo-junit-test:0.0.2
+    build:
+      context: ./demo-junit-test
+      dockerfile: Dockerfile
+    ports:
+      - 8183:8083
+  demo-jmeter-test:
+    image: demo-jmeter-test:0.0.2
+    build:
+      context: ./demo-jmeter-test
+      dockerfile: Dockerfile  
+    ports:
+      - 8184:8084

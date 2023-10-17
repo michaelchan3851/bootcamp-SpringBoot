@@ -9,13 +9,13 @@ import lombok.Getter;
 @Getter
 public class Order {
 
-  private static int idCounter = 0;
+  private static int idCounter = 0; // should be removed after DB
 
   private int id;
 
   private String userId;
 
-  private LocalDateTime tranDateTime;
+  private LocalDateTime orderDateTime;
 
   private Action action;
 
@@ -35,7 +35,7 @@ public class Order {
       OrderType orderType, double price, int share) {
     this.id = ++idCounter; // Review
     this.userId = userId;
-    this.tranDateTime = tranDateTime;
+    this.orderDateTime = LocalDateTime.now();
     this.action = action;
     this.orderType = orderType;
     this.price = price;
